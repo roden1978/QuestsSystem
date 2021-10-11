@@ -41,7 +41,7 @@ namespace QuestsSystem
             
             foreach (var quest in npcQuests)
             {
-                Console.WriteLine(quest.LocalId + ". " + quest.Description + "Taken:" + quest.QuestEvent.QuestStatus);
+                Console.WriteLine(quest.LocalId + ". " + quest.Description + "Taken:" + quest.Status);
             }
             var npcQuest = GetActiveQuestFromNpc(npc);
             
@@ -75,7 +75,7 @@ namespace QuestsSystem
        
         private void BringQuestToPlayer(Quest quest)
         {
-            quest.QuestEvent.UpdateStatus(Status.Active);
+            quest.UpdateStatus(Status.Active);
         }
         
        

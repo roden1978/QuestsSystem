@@ -14,14 +14,11 @@ namespace QuestsSystem
                 {typeof(Wizard), new Quest[]
                 {
                     new KillDragonQuest(0, 
-                        new KillDragonAgreement(new KillDragonMarker()), 
-                        new KillDragonQuestEvent()),
+                        new KillDragonAgreement(new KillDragonMarker())),
                     new CollectApplesQuest(1, 
-                        new CollectApplesAgreement(null), 
-                        new CollectApplesQuestEvent()),
+                        new CollectApplesAgreement(null)),
                     new FindPrincessQuest(2, 
-                        new FindPrincessAgreement(null), 
-                        new FindPrincessQuestEvent())
+                        new FindPrincessAgreement(null))
                 }
                 }
             });
@@ -36,10 +33,8 @@ namespace QuestsSystem
             Console.WriteLine("Follow to Wizard for quest");
             player.TouchNpc(npc);
             Console.WriteLine("Take the quest 'Kill the Dragon in the forest'");
-            //player kill dragon
             Console.WriteLine("Player kill the Dragon. The dragon leaves his tooth.");
             var markedItem = dragon.Die();
-            //player take marked item
             Console.WriteLine("Player give the tooth to inventory.");
             player.TouchQuestMarkedItem(markedItem);
             Console.WriteLine("Back to the Wizard after complete quest");

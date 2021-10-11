@@ -2,8 +2,8 @@
 {
     public class KillDragonQuest : Quest
     {
-        public KillDragonQuest(int id, Agreement agreement, QuestEvent questEvent) 
-            : base(id, agreement, questEvent)
+        public KillDragonQuest(int id, Agreement agreement) 
+            : base(id, agreement)
         {
             Description = "Kill the angry dragon.";
             Question = "You kill angry dragon?";
