@@ -6,14 +6,12 @@ namespace QuestsSystem
     public class Provider
     {
         private readonly QuestsRepository _questsRepository;
-        private readonly PlayerQuestRepository _playerQuestRepository;
         private readonly Player _player;
 
-        public Provider(QuestsRepository questsRepository, Player player, PlayerQuestRepository playerQuestRepository)
+        public Provider(QuestsRepository questsRepository, Player player)
         {
             _questsRepository = questsRepository;
             _player = player;
-            _playerQuestRepository = playerQuestRepository;
         }
         public void Subscribe()
         {
@@ -25,9 +23,9 @@ namespace QuestsSystem
             _player.OnTouchNpc -= GetNpcQuests;
         }
 
-        private Quest FindQuestFromNpc(Npc npc)
+        private Quest GetActiveQuestFromNpc(Npc npc)
         {
-            return _playerQuestRepository.HasQuestFromNpc(npc.GetType());
+            return _questsRepository.GetQuestFromNpc(npc);
         }
 
         private void GetNpcQuests(Npc npc)
@@ -41,15 +39,14 @@ namespace QuestsSystem
             {
                 Console.WriteLine(quest.LocalId + ". " + quest.Description + "Taken:" + quest.Agreement.QuestEvent.QuestStatus);
             }
-            //get quest from playerQuest repository
-            var npcQuest = FindQuestFromNpc(npc);
-            //
+            var npcQuest = GetActiveQuestFromNpc(npc);
+            
             var complete = CheckCompleteCondition(npcQuest);
             
             if(!complete)
             {
                 if (npcQuest?.GetType() == typeof(EmptyQuest))
-                    BringQuestToPlayer(npc, npcQuests[0]);
+                    BringQuestToPlayer(npcQuests.First());
                 else
                     Console.WriteLine(npcQuest?.Question);
             }        
@@ -66,32 +63,14 @@ namespace QuestsSystem
             return false;
         }
 
-        public void GetPlayerNotCompletionQuests(Npc npc)
+        public Quest[] GetAllQuestsWithStatus(Status status)
         {
-            var notCompletionQuests = Array.Empty<Quest>();
-            
-            var type = npc.GetType();
-            if(type.GetInterfaces().Contains(typeof(IQuestGiver)))
-            {
-                notCompletionQuests = _playerQuestRepository.GetNotCompletionQuest();
-            }
+            return _questsRepository.GetQuestsWithStatus(status);
         }
-        public void GetPlayerCompletionQuests(Npc npc)
-        {
-            var playerCompleteionQuests = Array.Empty<Quest>();
-            
-            var type = npc.GetType();
-            if(type.GetInterfaces().Contains(typeof(IQuestGiver)))
-            {
-                playerCompleteionQuests = _playerQuestRepository.GetCompletionQuest();
-            }
-        }
-
-        private Quest BringQuestToPlayer(Npc npc, Quest quest)
+       
+        private void BringQuestToPlayer(Quest quest)
         {
             quest.Agreement.QuestEvent.UpdateStatus(Status.Active);
-            _playerQuestRepository.AddQuest(npc.GetType(), quest);
-            return quest;
         }
     }
 }

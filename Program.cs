@@ -11,7 +11,6 @@ namespace QuestsSystem
             var markerRepository = new MarkerRepository();
             var markerRepositoryProvider = new MakerRepositoryProvider(markerRepository, player);
 
-            var playerQuestRepository = new PlayerQuestRepository();
             var questsRepository = new QuestsRepository(new Dictionary<Type, Quest[]>{
                 {typeof(Wizard), new Quest[]
                 {
@@ -24,7 +23,7 @@ namespace QuestsSystem
                     new FindPrincessQuest(2, new FindPrincessAgreement(new FindPrincessQuestEvent(null), null))
                 }}
             });
-            var provider = new Provider(questsRepository, player, playerQuestRepository);
+            var provider = new Provider(questsRepository, player);
             
             var npc = new Wizard();
             var dragonKillMarker = new KillDragonMarker();

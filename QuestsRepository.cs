@@ -26,7 +26,7 @@ namespace QuestsSystem
                     foreach (var quest in value)
                     {
                         if(quest.Agreement.QuestEvent.QuestStatus != Status.Active && 
-                           quest.Agreement.QuestEvent.QuestStatus != Status.Active)
+                           quest.Agreement.QuestEvent.QuestStatus != Status.Done)
                             npcQuests.Add(quest);
                     }
                     
@@ -34,6 +34,35 @@ namespace QuestsSystem
             }
 
             return npcQuests.ToArray();
+        }
+
+        public Quest GetQuestFromNpc(Npc npc)
+        {
+            foreach (var (key, value) in _quests)
+            {
+                if(key == npc.GetType())
+                    foreach (var quest in value)
+                    {
+                        if (quest.Agreement.QuestEvent.QuestStatus == Status.Active)
+                            return quest;
+                    }
+            }
+
+            return new EmptyQuest();
+        }
+
+        public Quest[] GetQuestsWithStatus(Status status)
+        {
+            var quests = new List<Quest>();
+            foreach (var (key, value) in _quests)
+            {
+                foreach (var quest in value)
+                {
+                    quests.Add(quest);
+                }
+            }
+
+            return quests.ToArray();
         }
     }
 }
