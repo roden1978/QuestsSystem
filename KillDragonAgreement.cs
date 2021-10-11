@@ -4,17 +4,18 @@ namespace QuestsSystem
 {
     public class KillDragonAgreement : Agreement
     {
-        public KillDragonAgreement(QuestEvent questEvent, MakerRepositoryProvider makerRepositoryProvider) 
-            : base(questEvent, makerRepositoryProvider)
+        private readonly Marker _marker;
+        public KillDragonAgreement(Marker marker) 
+            : base(marker)
         {
+            _marker = marker;
         }
 
-        protected override bool Condition()
+        protected override bool Condition(Marker[] markers)
         {
-            var markers = MakerRepositoryProvider.GetQuestMarkers(QuestEvent.Marker);
             foreach (var type in markers)
             {
-                if (type == QuestEvent.Marker.GetType())
+                if (type.GetType() == _marker.GetType())
                 {
                     return true;
                 }

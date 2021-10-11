@@ -1,32 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace QuestsSystem
 {
     public class MarkerRepository
     {
-        private readonly List<Type> _markers;
+        private readonly List<Marker> _markers;
 
         public MarkerRepository()
         {
-            _markers = new List<Type>(10);
+            _markers = new List<Marker>(10);
         }
 
-        public void AddMarker(Type markerType)
+        public void AddMarker(Marker marker)
         {
-            _markers.Add(markerType);
+            _markers.Add(marker);
         }
 
-        public Type[] GetMarkersFromRepository(Type markerType)
+        public Marker[] GetMarkersFromRepository(Marker marker)
         {
-            var findMarkers = new List<Type>();
-            foreach (var marker in _markers)
+            var findMarkers = new List<Marker>();
+            foreach (var item in _markers)
             {
-                if(marker == markerType)
+                if (item.GetType() == marker.GetType()) 
                     findMarkers.Add(marker);
             }
 
             return findMarkers.ToArray();
+        }
+
+        public Marker[] GetAllMarkers()
+        {
+            return _markers.ToArray();
         }
     }
 }

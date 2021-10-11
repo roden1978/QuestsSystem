@@ -2,30 +2,26 @@
 {
     public abstract class Agreement
     {
-        private readonly QuestEvent _questEvent;
-        private readonly MakerRepositoryProvider _makerRepositoryProvider;
+        private readonly Marker _marker;
 
-        protected Agreement(QuestEvent questEvent, MakerRepositoryProvider makerRepositoryProvider)
+        protected Agreement(Marker marker)
         {
-            _questEvent = questEvent;
-            _makerRepositoryProvider = makerRepositoryProvider;
+            _marker = marker;
         }
 
-        protected abstract bool Condition();
+        protected abstract bool Condition(Marker[] markers);
 
-        public void CompleteCondition()
+        public Status CompleteCondition(Status status, Marker[] markers)
         {
-            if (Condition() && _questEvent.QuestStatus != Status.Done)
+            if (Condition(markers) && status != Status.Done)
             {
-                _questEvent.UpdateStatus(Status.Done);
                 Reward();
+                return Status.Done;
             }
+
+            return status;
         }
 
         protected abstract void Reward();
-
-        public QuestEvent QuestEvent => _questEvent;
-
-        public MakerRepositoryProvider MakerRepositoryProvider => _makerRepositoryProvider;
     }
 }

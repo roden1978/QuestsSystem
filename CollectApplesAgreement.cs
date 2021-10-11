@@ -2,12 +2,13 @@
 {
     public class CollectApplesAgreement : Agreement
     {
-        public CollectApplesAgreement(QuestEvent questEvent, MakerRepositoryProvider makerRepositoryProvider) 
-            : base(questEvent, makerRepositoryProvider)
+        public CollectApplesAgreement(Marker marker) 
+            : base(marker)
         {
         }
 
-        protected override bool Condition()
+
+        protected override bool Condition(Marker[] markers)
         {
             throw new System.NotImplementedException();
         }
