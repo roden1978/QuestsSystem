@@ -9,21 +9,23 @@ namespace QuestsSystem
         {
             var player = new Player();
             var markerRepository = new MarkerRepository();
-            var markerRepositoryProvider = new MakerRepositoryProvider(markerRepository, player);
 
             var questsRepository = new QuestsRepository(new Dictionary<Type, Quest[]>{
                 {typeof(Wizard), new Quest[]
                 {
-                    new KillDragonQuest(0, new KillDragonAgreement(
-                        new KillDragonQuestEvent(
-                            new KillDragonMarker()
-                            ),markerRepositoryProvider)),
-                    new CollectApplesQuest(1, new CollectApplesAgreement(
-                        new CollectApplesQuestEvent(null), null)),
-                    new FindPrincessQuest(2, new FindPrincessAgreement(new FindPrincessQuestEvent(null), null))
-                }}
+                    new KillDragonQuest(0, 
+                        new KillDragonAgreement(new KillDragonMarker()), 
+                        new KillDragonQuestEvent()),
+                    new CollectApplesQuest(1, 
+                        new CollectApplesAgreement(null), 
+                        new CollectApplesQuestEvent()),
+                    new FindPrincessQuest(2, 
+                        new FindPrincessAgreement(null), 
+                        new FindPrincessQuestEvent())
+                }
+                }
             });
-            var provider = new Provider(questsRepository, player);
+            var provider = new Provider(player, questsRepository, markerRepository);
             
             var npc = new Wizard();
             var dragonKillMarker = new KillDragonMarker();
@@ -31,7 +33,6 @@ namespace QuestsSystem
             var dragon = new Dragon(markedGameObject);
 
             provider.Subscribe();
-            markerRepositoryProvider.Subscribe();
             Console.WriteLine("Follow to Wizard for quest");
             player.TouchNpc(npc);
             Console.WriteLine("Take the quest 'Kill the Dragon in the forest'");
@@ -43,7 +44,6 @@ namespace QuestsSystem
             player.TouchQuestMarkedItem(markedItem);
             Console.WriteLine("Back to the Wizard after complete quest");
             player.TouchNpc(npc);
-            markerRepositoryProvider.Unsubscribe();
             provider.Unsubscribe();
         }
     }

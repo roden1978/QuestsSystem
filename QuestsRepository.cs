@@ -25,8 +25,8 @@ namespace QuestsSystem
                 {
                     foreach (var quest in value)
                     {
-                        if(quest.Agreement.QuestEvent.QuestStatus != Status.Active && 
-                           quest.Agreement.QuestEvent.QuestStatus != Status.Done)
+                        if(quest.GetStatus() != Status.Active && 
+                           quest.GetStatus() != Status.Done)
                             npcQuests.Add(quest);
                     }
                     
@@ -43,7 +43,7 @@ namespace QuestsSystem
                 if(key == npc.GetType())
                     foreach (var quest in value)
                     {
-                        if (quest.Agreement.QuestEvent.QuestStatus == Status.Active)
+                        if (quest.GetStatus() == Status.Active)
                             return quest;
                     }
             }

@@ -6,21 +6,25 @@ namespace QuestsSystem
     public class Provider
     {
         private readonly QuestsRepository _questsRepository;
+        private readonly MarkerRepository _markerRepository;
         private readonly Player _player;
 
-        public Provider(QuestsRepository questsRepository, Player player)
+        public Provider(Player player, QuestsRepository questsRepository, MarkerRepository markerRepository)
         {
             _questsRepository = questsRepository;
+            _markerRepository = markerRepository;
             _player = player;
         }
         public void Subscribe()
         {
             _player.OnTouchNpc += GetNpcQuests;
+            _player.OnMarkedItemTouch += AddMarkerToRepository;
         }
 
         public void Unsubscribe()
         {
             _player.OnTouchNpc -= GetNpcQuests;
+            _player.OnMarkedItemTouch -= AddMarkerToRepository;
         }
 
         private Quest GetActiveQuestFromNpc(Npc npc)
@@ -37,7 +41,7 @@ namespace QuestsSystem
             
             foreach (var quest in npcQuests)
             {
-                Console.WriteLine(quest.LocalId + ". " + quest.Description + "Taken:" + quest.Agreement.QuestEvent.QuestStatus);
+                Console.WriteLine(quest.LocalId + ". " + quest.Description + "Taken:" + quest.QuestEvent.QuestStatus);
             }
             var npcQuest = GetActiveQuestFromNpc(npc);
             
@@ -56,7 +60,8 @@ namespace QuestsSystem
         {
             if (npcQuest != null && npcQuest.GetType() != typeof(EmptyQuest))
             {
-                npcQuest.Agreement.CompleteCondition();
+                var questsMarkers = _markerRepository.GetAllMarkers();
+                npcQuest.CheckCompleteQuest(questsMarkers);
                 return true;
             }
 
@@ -70,7 +75,13 @@ namespace QuestsSystem
        
         private void BringQuestToPlayer(Quest quest)
         {
-            quest.Agreement.QuestEvent.UpdateStatus(Status.Active);
+            quest.QuestEvent.UpdateStatus(Status.Active);
+        }
+        
+       
+        private void AddMarkerToRepository(GameObject markedItem)
+        {
+            _markerRepository.AddMarker(markedItem.Marker);
         }
     }
 }

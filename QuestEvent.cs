@@ -2,21 +2,17 @@
 {
     public abstract class QuestEvent
     {
-        private Status _status;
-        private Marker _marker;
-        protected QuestEvent(Marker marker)
+        protected QuestEvent()
         {
-            _status = Status.Waiting;
-            _marker = marker;
+            QuestStatus = Status.Waiting;
         }
         
         public void UpdateStatus(Status status)
         {
-            _status = status;
+            QuestStatus = status;
         }
 
-        public Status QuestStatus => _status;
+        public Status QuestStatus { get; private set; }
 
-        public Marker Marker => _marker;
     }
 }

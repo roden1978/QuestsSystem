@@ -2,12 +2,11 @@
 {
     public class FindPrincessAgreement : Agreement
     {
-        public FindPrincessAgreement(QuestEvent questEvent, MakerRepositoryProvider makerRepositoryProvider) 
-            : base(questEvent, makerRepositoryProvider)
+        public FindPrincessAgreement(Marker marker) : base(marker)
         {
         }
 
-        protected override bool Condition()
+        protected override bool Condition(Marker[] markers)
         {
             throw new System.NotImplementedException();
         }
